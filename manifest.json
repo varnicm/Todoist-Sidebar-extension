@@ -11,7 +11,32 @@
     "side_panel": {
       "default_path": "index.html"
     },
-    "permissions": ["sidePanel"]
+    "permissions": [
+      "sidePanel",
+      "identity"
+    ],
+    "host_permissions": [
+      "https://todoist.com/*"
+  ],
+    "oauth2": {
+      "client_id": "58267cc5cbd542478775454401832e86",
+      "scopes": [
+        "data:read"
+      ]
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["script.js"]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["redirect.html"],
+        "matches": ["<all_urls>"]
+      }
+    ]
   }
+
 
   
