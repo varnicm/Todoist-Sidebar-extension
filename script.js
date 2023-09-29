@@ -1,6 +1,6 @@
 // Step 1: Authorization Request
-const CLIENT_ID = '58267cc5cbd542478775454401832e86';
-const REDIRECT_URI = 'https://mdepfgkfpkbdnfjejnheejkdcdegghlk.chromiumapp.org'; // Replace with your redirect URI
+const CLIENT_ID = '';
+const REDIRECT_URI = ''; // Replace with your redirect URI
 const SCOPES = 'data:read'; // Replace with the scopes you want
 
 const authorizationUrl = `https://todoist.com/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&state=secretstring`;
@@ -14,7 +14,7 @@ const code = prompt("Enter the code from the redirect URL:");
 
 // Step 3: Token Exchange
 const TOKEN_URL = "https://todoist.com/oauth/access_token";
-const CLIENT_SECRET = '8f8647151f5948918932c4f3d768429b';
+const CLIENT_SECRET = '';
 
 const payload = {
     client_id: CLIENT_ID,
