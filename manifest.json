@@ -18,12 +18,13 @@
     "host_permissions": [
       "https://todoist.com/*"
   ],
-    "oauth2": {
+   "oauth2": {
       "client_id": "58267cc5cbd542478775454401832e86",
       "scopes": [
         "data:read"
-      ]
-    },
+      ],
+      "redirect_uris": ["https://mdepfgkfpkbdnfjejnheejkdcdegghlk.chromiumapp.org/"]
+   },
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
