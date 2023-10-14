@@ -1,41 +1,75 @@
-// Step 1: Authorization Request
-const CLIENT_ID = '58267cc5cbd542478775454401832e86';
-const REDIRECT_URI = 'https://mdepfgkfpkbdnfjejnheejkdcdegghlk.chromiumapp.org'; // Replace with your redirect URI
-const SCOPES = 'data:read'; // Replace with the scopes you want
+document.addEventListener("DOMContentLoaded", function() {
+    const button = document.getElementById('loginBtn');
+    var token = localStorage.getItem('todoistToken');
 
-const authorizationUrl = `https://todoist.com/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&state=secretstring`;
-
-// This will open the authorization URL in a new browser tab/window
-window.open(authorizationUrl, '_blank');
-
-// In a real-world application, you'd have a more automated way to capture the code from the redirect.
-// For this example, we'll assume the user copies and pastes the code into a prompt dialog.
-const code = prompt("Enter the code from the redirect URL:");
-
-// Step 3: Token Exchange
-const TOKEN_URL = "https://todoist.com/oauth/access_token";
-const CLIENT_SECRET = '8f8647151f5948918932c4f3d768429b';
-
-const payload = {
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-    code: code,
-    redirect_uri: REDIRECT_URI
-};
-
-fetch(TOKEN_URL, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-})
-.then(response => response.json())
-.then(data => {
-    if(data.access_token) {
-        console.log("Access Token:", data.access_token);
-    } else {
-        console.log("Error:", data.error || "Unknown Error");
+    if (token) {
+        document.getElementById('status').innerText = 'Logged in';
+        document.getElementById('loginBtn').style.display = 'none';
+        fetchUserTasks(token);
     }
-})
-.catch(error => console.error("There was an error fetching the token:", error));
+
+    if (button) {
+        button.addEventListener('click', function() {
+
+            console.log("Button clicked!");
+
+            const clientId = '58267cc5cbd542478775454401832e86';
+            const redirectUri = 'https://moesanjari.com/redirect.php';
+            const scope = 'data:read';
+            const state = Math.random().toString(36).substring(7);
+
+            const authUrl = `https://todoist.com/oauth/authorize?client_id=${clientId}&scope=${scope}&state=${state}`;
+
+            console.log("Redirecting to:", authUrl);
+            
+            // Use chrome.tabs API to create a new tab with the auth URL
+            //chrome.tabs.create({ url: authUrl });
+            window.open(authUrl, '_blank');
+
+        });
+    } else {
+        console.error("Button element not found!");
+    }
+});
+
+window.addEventListener("message", function(event) {
+    if (event.data.messageType && event.data.messageType === 'authorizationToken') {
+        var token = event.data.token;
+        console.log("Received token:", token);
+
+        // Save the token for future use
+        localStorage.setItem('todoistToken', token);
+
+        // Update the UI
+        document.getElementById('status').innerText = 'Logged in';
+        document.getElementById('loginBtn').style.display = 'none';
+
+        // Optionally, fetch tasks or other data here using the token.
+    }
+});
+
+function fetchTasks(token) {
+    // Here, call the Todoist API to fetch tasks or other information using the token.
+    // Once fetched, update the `tasks` div in the UI.
+}
+
+function fetchUserTasks(token) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ action: "fetchTasks", token: token }, response => {
+            if (response.success) {
+                const tasks = response.data;
+                console.log(tasks);
+                resolve(tasks);
+            } else {
+                console.error('There was a problem with the fetch operation:', response.error);
+                reject(response.error);
+            }
+        });
+    });
+}
+
+// Usage
+const accessToken = localStorage.getItem('todoistToken');  // Replace with your token
+
+
+
